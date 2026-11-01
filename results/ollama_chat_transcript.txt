@@ -1,0 +1,69 @@
+Chat with real model: ollama:qwen2.5:3b-instruct
+
+(base) saishreetaluri@Saishrees-MacBook-Pro aegis-wallet  % python -m aegis.cli chat --model ollama:qwen2.5:3b-instruct --trace
+Keystore passphrase: 
+Wallet 0xc27e9CA329b7c8588FbcdCf1E475CA7c4d3B6803 on local test chain (chain id 131277322940537); model=ollama:qwen2.5:3b-instruct
+Try: 'send 0.5 ETH to alice', 'approve 100 tUSD for vault', 'read https://... and summarize'. Ctrl-D to quit.
+
+you> what is my balance
+[info] Balances (computed locally, never sent to the model): ETH: 10; tUSD: 10000
+  trace:
+   - model proposed: {"action": "balance"}
+  egress: {'rpc_methods': ['eth_accounts', 'eth_call', 'eth_chainId', 'eth_getBalance'], 'http': []}
+
+you> send 5 ETH to bob or alice
+[needs_clarification] I see more than one possible recipient/target. Which one?
+  trace:
+   - model proposed: {"action": "send", "to": "bob", "amount": "5", "asset": "ETH", "description": "Send 5 ETH to bob or alice"}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> bob
+[needs_clarification] How much ETH should I send to bob?
+  trace:
+   - model proposed: {"action": "clarify", "question": "How much ETH should I send to bob?"}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> 5 ETH
+[blocked] Your message did not ask for this action; the proposal did not come from you.
+  trace:
+   - model proposed: {"action": "send", "to": "0xunknown", "amount": "5", "asset": "ETH", "description": "Send 5 ETH to 0xunknown"}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> Send 5 ETH to bob
+[blocked] Policy: exceeds per-transaction cap (1 ETH); exceeds 24h cap (2 ETH; already spent 0.5)
+  trace:
+   - model proposed: {"action": "send", "to": "bob", "amount": "5", "asset": "ETH", "description": "Send 5 ETH to bob"}
+   - validated intent: eth_transfer 5 ETH -> 0x6813Eb9362372EEF6200f3b1dbC3f819671cBA69
+  egress: {'rpc_methods': ['eth_chainId', 'eth_estimateGas', 'eth_gasPrice', 'eth_getBalance', 'eth_getTransactionCount'], 'http': []}
+
+you> who can i send eth to?
+[info] You can send ETH/tUSD to: alice (0x2B5AD5...D6cF); bob (0x6813Eb...BA69), or to any 0x address you type in full. Approvals/deposits go only to: vault.
+  trace:
+   - model proposed: {"action": "contacts"}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> send 0.67 eth to alice
+
+============================================================
+CONFIRM TRANSACTION
+SEND 0.67 ETH
+  to/for: 0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF [alice]
+  chain id: 131277322940537   max network fee: 0.0000252 ETH
+  digest: 7f7a09cde99c30b0  (decoded from the raw transaction bytes, not from the model's description)
+  model's own description (unverified): Send 0.67 ETH to alice
+============================================================
+Type 'yes 7f7a09' to sign, anything else to cancel: yes 7f7a09
+[executed] Done: eth_transfer 0.67 ETH -> 0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF. tx 0x0614915406dac8ba9dae9fd0ff45fa667daea82e57b5415a53c93852f343f886
+  trace:
+   - model proposed: {"action": "send", "to": "alice", "amount": "0.67", "asset": "ETH", "description": "Send 0.67 ETH to alice"}
+   - validated intent: eth_transfer 0.67 ETH -> 0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF
+   - policy ok; flags=['large_relative_to_cap']
+   - user approved exact digest 7f7a09cde99c
+   - signed locally + broadcast; receipt status=1
+  egress: {'rpc_methods': ['eth_chainId', 'eth_estimateGas', 'eth_gasPrice', 'eth_getBalance', 'eth_getTransactionCount', 'eth_getTransactionReceipt', 'eth_sendRawTransaction'], 'http': []}
+
+you> send 0.2 eth to cathy
+[needs_clarification] Who should receive it?
+  trace:
+   - model proposed: {"action": "send", "to": "cathy", "amount": "0.2", "asset": "ETH", "description": "Send 0.2 ETH to cathy"}
+  egress: {'rpc_methods': [], 'http': []}

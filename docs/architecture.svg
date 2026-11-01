@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Helvetica,Arial,sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b00020"/></marker></defs>
+<rect width="1200" height="800" fill="#fff"/>
+<text x="20" y="22" font-size="17" font-weight="bold">Aegis Wallet: access layer between an open-source LLM and an Ethereum wallet (everything runs on the user's machine)</text>
+<rect x="10" y="36" width="230" height="700" rx="10" fill="none" stroke="#1b7f3b" stroke-width="2"/>
+<text x="20" y="52" font-size="12" font-weight="bold" fill="#1b7f3b">USER (trusted channel)</text>
+<rect x="10" y="178" width="230" height="100" rx="10" fill="#fff5f5" stroke="#b00020" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="20" y="194" font-size="12" font-weight="bold" fill="#b00020"></text>
+<text x="20" y="194" font-size="12" font-weight="bold" fill="#b00020">UNTRUSTED CONTENT (data only)</text>
+<rect x="260" y="36" width="300" height="280" rx="10" fill="none" stroke="#c46a00" stroke-width="2"/>
+<text x="270" y="52" font-size="12" font-weight="bold" fill="#c46a00">MODEL ZONE: proposer only</text>
+<rect x="590" y="36" width="600" height="520" rx="10" fill="none" stroke="#1f4e9c" stroke-width="2"/>
+<text x="600" y="52" font-size="12" font-weight="bold" fill="#1f4e9c">ACCESS LAYER (deterministic code; this is the submission)</text>
+<rect x="590" y="566" width="600" height="118" rx="10" fill="none" stroke="#1b7f3b" stroke-width="2"/>
+<text x="600" y="582" font-size="12" font-weight="bold" fill="#1b7f3b">KEY BOUNDARY</text>
+<rect x="25" y="60" width="200" height="60" rx="6" fill="#e8f5ec" stroke="#1b7f3b" stroke-width="1.5"/>
+<text x="125.0" y="79" font-size="12" text-anchor="middle" font-weight="bold">You type a request</text>
+<text x="125.0" y="94" font-size="11" text-anchor="middle">(only source of recipient/amount/asset)</text>
+<rect x="25" y="215" width="200" height="52" rx="6" fill="#fff" stroke="#b00020" stroke-width="1.5"/>
+<text x="125.0" y="234" font-size="11" text-anchor="middle">Web page / document</text>
+<text x="125.0" y="249" font-size="11" text-anchor="middle">/ tool output</text>
+<rect x="25" y="470" width="200" height="100" rx="6" fill="#e8f5ec" stroke="#1b7f3b" stroke-width="1.5"/>
+<text x="125.0" y="489" font-size="12" text-anchor="middle" font-weight="bold">Confirmation prompt</text>
+<text x="125.0" y="504" font-size="11" text-anchor="middle">built from DECODED calldata:</text>
+<text x="125.0" y="519" font-size="11" text-anchor="middle">who, what, how much, fee,</text>
+<text x="125.0" y="534" font-size="11" text-anchor="middle">NEW-RECIPIENT warning</text>
+<rect x="25" y="600" width="200" height="80" rx="6" fill="#e8f5ec" stroke="#1b7f3b" stroke-width="1.5"/>
+<text x="125.0" y="619" font-size="12" text-anchor="middle" font-weight="bold">Out-of-band commands</text>
+<text x="125.0" y="634" font-size="11" text-anchor="middle">/grant /contact /allow-spender</text>
+<text x="125.0" y="649" font-size="11" text-anchor="middle">(edit policy.json; no model path)</text>
+<rect x="275" y="60" width="270" height="50" rx="6" fill="#fff4e0" stroke="#c46a00" stroke-width="1.5"/>
+<text x="410.0" y="79" font-size="12" text-anchor="middle" font-weight="bold">Secret scrubber</text>
+<text x="410.0" y="94" font-size="11" text-anchor="middle">keys, seed phrases, passphrase</text>
+<rect x="275" y="190" width="270" height="110" rx="6" fill="#fff4e0" stroke="#c46a00" stroke-width="1.5"/>
+<text x="410.0" y="209" font-size="12" text-anchor="middle" font-weight="bold">Open-source LLM (e.g. Ollama)</text>
+<text x="410.0" y="224" font-size="11" text-anchor="middle">sees: your sentence + contact LABELS</text>
+<text x="410.0" y="239" font-size="11" text-anchor="middle">returns ONE JSON proposal</text>
+<text x="410.0" y="254" font-size="11" text-anchor="middle">no keys, no addresses, no balances,</text>
+<text x="410.0" y="269" font-size="11" text-anchor="middle">no signer/chain handle</text>
+<rect x="620" y="62" width="310" height="58" rx="6" fill="#eaf0fb" stroke="#1f4e9c" stroke-width="1.5"/>
+<text x="775.0" y="81" font-size="12" text-anchor="middle" font-weight="bold">1  Strict schema parse</text>
+<text x="775.0" y="96" font-size="11" text-anchor="middle">closed action set; unknown/extra fields (data,</text>
+<text x="775.0" y="111" font-size="11" text-anchor="middle">gas) rejected</text>
+<path d="M775,120 V140" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="620" y="140" width="310" height="58" rx="6" fill="#eaf0fb" stroke="#1f4e9c" stroke-width="1.5"/>
+<text x="775.0" y="159" font-size="12" text-anchor="middle" font-weight="bold">2  Grounding + ambiguity</text>
+<text x="775.0" y="174" font-size="11" text-anchor="middle">recipient/amount/asset/verb must appear in YOUR</text>
+<text x="775.0" y="189" font-size="11" text-anchor="middle">message; else ask or block</text>
+<path d="M775,198 V218" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="620" y="218" width="310" height="58" rx="6" fill="#eaf0fb" stroke="#1f4e9c" stroke-width="1.5"/>
+<text x="775.0" y="237" font-size="12" text-anchor="middle" font-weight="bold">3  Deterministic tx builder</text>
+<text x="775.0" y="252" font-size="11" text-anchor="middle">layer (not model) encodes calldata; model supplies</text>
+<text x="775.0" y="267" font-size="11" text-anchor="middle">no bytes</text>
+<path d="M775,276 V296" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="620" y="296" width="310" height="58" rx="6" fill="#eaf0fb" stroke="#1f4e9c" stroke-width="1.5"/>
+<text x="775.0" y="315" font-size="12" text-anchor="middle" font-weight="bold">4  Decode round-trip + simulate</text>
+<text x="775.0" y="330" font-size="11" text-anchor="middle">raw bytes decoded independently; estimateGas /</text>
+<text x="775.0" y="345" font-size="11" text-anchor="middle">balance check</text>
+<path d="M775,354 V374" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="620" y="374" width="310" height="58" rx="6" fill="#eaf0fb" stroke="#1f4e9c" stroke-width="1.5"/>
+<text x="775.0" y="393" font-size="12" text-anchor="middle" font-weight="bold">5  Policy engine</text>
+<text x="775.0" y="408" font-size="11" text-anchor="middle">caps, 24h ledger, allowlists, no unlimited</text>
+<text x="775.0" y="423" font-size="11" text-anchor="middle">approve, grants</text>
+<path d="M775,432 V452" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="620" y="452" width="310" height="58" rx="6" fill="#eaf0fb" stroke="#1f4e9c" stroke-width="1.5"/>
+<text x="775.0" y="471" font-size="12" text-anchor="middle" font-weight="bold">6  Approval gate</text>
+<text x="775.0" y="486" font-size="11" text-anchor="middle">one-time token bound to sha256(tx); standing</text>
+<text x="775.0" y="501" font-size="11" text-anchor="middle">grants scoped</text>
+<rect x="965" y="376" width="210" height="56" rx="6" fill="#fffbe0" stroke="#8a7600" stroke-width="1.5"/>
+<text x="1070.0" y="395" font-size="12" text-anchor="middle" font-weight="bold">policy.json (user-owned)</text>
+<text x="1070.0" y="410" font-size="11" text-anchor="middle">caps, contacts, spenders, grants</text>
+<rect x="620" y="596" width="310" height="76" rx="6" fill="#e8f5ec" stroke="#1b7f3b" stroke-width="1.5"/>
+<text x="775.0" y="615" font-size="12" text-anchor="middle" font-weight="bold">Signer (only code that touches the key)</text>
+<text x="775.0" y="630" font-size="11" text-anchor="middle">verifies approval == digest(tx); re-checks</text>
+<text x="775.0" y="645" font-size="11" text-anchor="middle">policy from DISK; decrypts key at sign time</text>
+<rect x="965" y="596" width="210" height="60" rx="6" fill="#e8f5ec" stroke="#1b7f3b" stroke-width="1.5"/>
+<text x="1070.0" y="615" font-size="12" text-anchor="middle" font-weight="bold">Encrypted keystore</text>
+<text x="1070.0" y="630" font-size="11" text-anchor="middle">(Web3 secret storage v3)</text>
+<rect x="620" y="700" width="560" height="52" rx="6" fill="#eef" stroke="#336" stroke-width="1.5"/>
+<text x="900.0" y="719" font-size="12" text-anchor="middle" font-weight="bold">Ethereum: local EVM (reproducible) or testnet RPC</text>
+<text x="900.0" y="734" font-size="11" text-anchor="middle">receives only the signed raw tx + read calls; never prompts, policy, or the key</text>
+<path d="M125,120 V135 H260 V85 H275" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="150" y="131" font-size="10.5" fill="#333" text-anchor="start">message</text>
+<path d="M125,267 V290 H255 V215 H275" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="30" y="304" font-size="10.5" fill="#333" text-anchor="start">wrapped as untrusted, scrubbed</text>
+<path d="M410,110 V190" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="418" y="155" font-size="10.5" fill="#333" text-anchor="start">scrubbed text</text>
+<path d="M545,245 H570 V91 H620" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="548" y="262" font-size="10.5" fill="#333" text-anchor="start">JSON proposal</text>
+<path d="M125,60 V46 H604 V169 H620" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="300" y="33" font-size="10.5" fill="#333" text-anchor="start">trusted channel: the ONLY grounding source</text>
+<path d="M965,404 H930" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M620,482 H225" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="235" y="476" font-size="10.5" fill="#333" text-anchor="start">summary from decoded tx</text>
+<path d="M225,502 H620" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="235" y="518" font-size="10.5" fill="#333" text-anchor="start">user approves exact digest</text>
+<path d="M775,510 V596" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="785" y="556" font-size="10.5" fill="#333" text-anchor="start">approval token</text>
+<path d="M930,634 H965" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="934" y="628" font-size="10.5" fill="#333" text-anchor="start">unlock</text>
+<path d="M1040,432 V582 H900 V596" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)" stroke-dasharray="5 4"/>
+<text x="1048" y="500" font-size="10.5" fill="#333" text-anchor="start">re-check from disk</text>
+<path d="M775,672 V700" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="785" y="690" font-size="10.5" fill="#333" text-anchor="start">raw signed tx</text>
+<path d="M125,680 V772 H1195 V404 H1175" fill="none" stroke="#333" stroke-width="1.8" marker-end="url(#a)" stroke-dasharray="5 4"/>
+<text x="640" y="768" font-size="10.5" fill="#333" text-anchor="start">user-only edits</text>
+<text x="270" y="338" font-size="11" fill="#b00020">Injected text can steer the model but can NOT supply a</text>
+<text x="270" y="352" font-size="11" fill="#b00020">value the signer sees: step 2 trusts only the user's</text>
+<text x="270" y="366" font-size="11" fill="#b00020">own message, so hijacked proposals are blocked.</text>
+<text x="270" y="396" font-size="11" font-weight="bold">Information flows (results/privacy_flows.md)</text>
+<text x="280" y="413" font-size="10.5">- Model: user text, labels, symbols only</text>
+<text x="280" y="428" font-size="10.5">- RPC node: signed tx + reads (public by design)</text>
+<text x="280" y="443" font-size="10.5">- Web: only URLs the user typed</text>
+<text x="280" y="458" font-size="10.5">- Logs: scrubbed. Policy: never leaves disk</text>
+</svg>

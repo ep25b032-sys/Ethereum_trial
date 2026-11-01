@@ -1,0 +1,83 @@
+Chat with deterministic rule-based parser (stand-in model, no real LLM)
+
+(.venv) (base) saishreetaluri@Saishrees-MacBook-Pro aegis-wallet % python -m aegis.cli chat --trace
+Keystore passphrase: 
+Wallet 0xc27e9CA329b7c8588FbcdCf1E475CA7c4d3B6803 on local test chain (chain id 131277322940537); model=rule-based-parser
+Try: 'send 0.5 ETH to alice', 'approve 100 tUSD for vault', 'read https://... and summarize'. Ctrl-D to quit.
+
+you> what is my balance
+[info] Balances (computed locally, never sent to the model): ETH: 10; tUSD: 10000
+  trace:
+   - model proposed: {"action": "balance"}
+  egress: {'rpc_methods': ['eth_accounts', 'eth_call', 'eth_chainId', 'eth_getBalance'], 'http': []}
+
+you> send 7 ETH to bob
+[blocked] Policy: exceeds per-transaction cap (1 ETH); exceeds 24h cap (2 ETH; already spent 0)
+  trace:
+   - model proposed: {"action": "send", "amount": "7", "asset": "ETH", "to": "bob", "description": "send 7 ETH -> bob"}
+   - validated intent: eth_transfer 7 ETH -> 0x6813Eb9362372EEF6200f3b1dbC3f819671cBA69
+  egress: {'rpc_methods': ['eth_chainId', 'eth_estimateGas', 'eth_gasPrice', 'eth_getBalance', 'eth_getTransactionCount'], 'http': []}
+
+you> send 0.67 ETH to alice or bob or cathy
+[needs_clarification] I see more than one possible recipient/target. Which one?
+  trace:
+   - model proposed: {"action": "send", "amount": "0.67", "asset": "ETH", "to": "alice", "description": "send 0.67 ETH -> alice"}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> cathy
+[explained] Model says (unverified, text only): I can send ETH/tUSD, approve and deposit tUSD for the vault, check balances, or read a page you link.
+  trace:
+   - model proposed: {"action": "explain", "text": "I can send ETH/tUSD, approve and deposit tUSD for the vault, check balances, or read a page you link."}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> send some ETH to bob
+[needs_clarification] Please specify an amount.
+  trace:
+   - model proposed: {"action": "clarify", "question": "Please specify an amount."}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> 1 ETH
+[explained] Model says (unverified, text only): I can send ETH/tUSD, approve and deposit tUSD for the vault, check balances, or read a page you link.
+  trace:
+   - model proposed: {"action": "explain", "text": "I can send ETH/tUSD, approve and deposit tUSD for the vault, check balances, or read a page you link."}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> send 0.5 ETH to alice
+
+============================================================
+CONFIRM TRANSACTION
+SEND 0.5 ETH
+  to/for: 0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF [alice]
+  chain id: 131277322940537   max network fee: 0.0000252 ETH
+  digest: 6503d205b569b994  (decoded from the raw transaction bytes, not from the model's description)
+  model's own description (unverified): send 0.5 ETH -> alice
+============================================================
+Type 'yes 6503d2' to sign, anything else to cancel: yes 6503d2
+[executed] Done: eth_transfer 0.5 ETH -> 0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF. tx 0x4e7709c878605855152fd7d1f16e0b2a59815f5d95343a9cbb42da1828e61ac0
+  trace:
+   - model proposed: {"action": "send", "amount": "0.5", "asset": "ETH", "to": "alice", "description": "send 0.5 ETH -> alice"}
+   - validated intent: eth_transfer 0.5 ETH -> 0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF
+   - policy ok; flags=['large_relative_to_cap']
+   - user approved exact digest 6503d205b569
+   - signed locally + broadcast; receipt status=1
+  egress: {'rpc_methods': ['eth_chainId', 'eth_estimateGas', 'eth_gasPrice', 'eth_getBalance', 'eth_getTransactionCount', 'eth_getTransactionReceipt', 'eth_sendRawTransaction'], 'http': []}
+
+you> who are the people i can transfer my ETH to?
+[needs_clarification] Please specify an amount, a recipient.
+  trace:
+   - model proposed: {"action": "clarify", "question": "Please specify an amount, a recipient."}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> Who are the recipients i can transfer to
+[needs_clarification] Please specify an amount, a token (ETH or tUSD), a recipient.
+  trace:
+   - model proposed: {"action": "clarify", "question": "Please specify an amount, a token (ETH or tUSD), a recipient."}
+  egress: {'rpc_methods': [], 'http': []}
+
+you>    cd ~/Downloads/aegis-wallet
+[explained] Model says (unverified, text only): I can send ETH/tUSD, approve and deposit tUSD for the vault, check balances, or read a page you link.
+  trace:
+   - model proposed: {"action": "explain", "text": "I can send ETH/tUSD, approve and deposit tUSD for the vault, check balances, or read a page you link."}
+  egress: {'rpc_methods': [], 'http': []}
+
+you> 

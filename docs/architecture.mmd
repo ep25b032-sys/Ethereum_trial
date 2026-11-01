@@ -1,0 +1,20 @@
+%% Mermaid source equivalent of architecture.svg (render at mermaid.live)
+flowchart LR
+  U[You: trusted channel] --> S[Secret scrubber]
+  W[Web / docs / tool output: UNTRUSTED data] --> S
+  S --> M[Open-source LLM: proposer only]
+  M -->|JSON proposal| P1[1 Strict schema]
+  U -.->|only grounding source| P2
+  P1 --> P2[2 Grounding + ambiguity]
+  P2 -->|ask| U
+  P2 --> P3[3 Deterministic tx builder]
+  P3 --> P4[4 Decode round-trip + simulate]
+  P4 --> P5[5 Policy engine]
+  PJ[(policy.json: user-owned)] --> P5
+  P5 --> P6[6 Approval gate]
+  P6 -->|decoded summary| C[Confirmation prompt]
+  C -->|approve exact digest| P6
+  P6 -->|one-time token| SG[Signer + encrypted keystore]
+  PJ -.->|re-check from disk| SG
+  SG -->|raw signed tx| E[(Ethereum: local EVM / testnet)]
+  UC[User-only commands] -.-> PJ

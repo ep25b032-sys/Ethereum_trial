@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.solc/
+node_modules/
+.aegis/
+.venv/
+.DS_Store
