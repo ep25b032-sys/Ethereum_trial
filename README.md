@@ -75,3 +75,44 @@ Use `python -m aegis.cli chat --model worst-case --trace` to watch a simulated m
 - Real-LLM numbers come from one run of one 3B model with temperature not varied.
 
 See [docs/FAILURE_ANALYSIS.md](docs/FAILURE_ANALYSIS.md) for the full list.
+
+## Tasks handled and what each signature authorises
+
+Only on-chain transactions are signed. There is no off-chain message signing. Every signature is for one transaction whose bytes were built by the access layer, decoded back independently, and approved by the user against a digest.
+
+| Task | What the signature authorises |
+|---|---|
+| Send ETH to a contact or a full 0x address | Transfer of exactly the confirmed amount to exactly the confirmed address |
+| Send tUSD (ERC-20) | `transfer` of the confirmed amount to the confirmed address |
+| Approve tUSD for the vault | `approve` of the exact confirmed amount to the allowlisted vault only. Unlimited approvals are never allowed |
+| Deposit tUSD into the vault | `deposit` of the confirmed amount into the allowlisted vault |
+| Balance, contact list, read a web page | No signature. These are read-only or explain-only |
+
+Standing grants (ongoing permissions) are set by the user in `policy.json`, outside the model path, and are scoped by spender, asset and cap.
+
+## Existing components used (and what each can access)
+
+| Component | Role | Access to information and signing authority |
+|---|---|---|
+| Ollama + `qwen2.5:3b-instruct` | Open-source model that turns natural language into a JSON proposal | Sees the scrubbed user sentence and contact labels only. No keys, no addresses, no balances. Cannot sign |
+| web3.py 8.0.0 | RPC client | Sends reads and the already-signed transaction. No key access |
+| eth-account 0.14.0 | Signing and keystore encryption library | Used only inside the signer, at sign time |
+| eth-tester 0.14.0b1 + py-evm 0.12.1b1 | Reproducible in-process local EVM | Local only, no network |
+| requests | Fetches pages the user explicitly links | Outbound HTTP only to URLs the user typed |
+| Solidity (`contracts/TestToken.sol`, `contracts/Vault.sol`), compiled via `scripts/compile.js` | Test token and vault used for the demo | Local test chain only |
+| pytest | Test runner | None |
+
+## Access-layer functionality we built
+
+All of `aegis/`: the strict proposal schema and model adapters (`models.py`), grounding and ambiguity checks (`grounding.py`), deterministic transaction builder and independent decoder (`txcodec.py`), policy engine with caps, allowlists and 24-hour ledger (`policy.py`), secret scrubber (`scrubber.py`), signer with keystore and approval-token check (`signer.py`), untrusted web-content handling (`webtool.py`), agent loop (`agent.py`), CLI (`cli.py`), and the evaluation harness (`evalkit.py`), plus the attack suite in `tests/` and `scripts/`.
+
+## What becomes public, and what the system adds to it
+
+A transfer, approval or deposit publishes the sender, the recipient or contract, the amount, and the timing. That is public by design on Ethereum. The access layer builds the calldata itself and adds no memo or note, so the user's reason for the payment, contact names, and anything said to the model never go on-chain. The RPC node sees the signed transaction and read calls. The model sees only the scrubbed sentence and contact labels. The measured table is in `results/privacy_flows.md`.
+
+## Resource usage
+
+- No GPU and no network needed for the 400-run attack suite (`python scripts/run_suite.py`), which takes about 45 seconds on a laptop.
+- Real-model runs use Ollama with `qwen2.5:3b-instruct`, a 1.9 GB download (`results/ollama_list.txt`). Per-request latency in `results/llm_suite_qwen2.5_3b-instruct.json` ranges from about 0.3 s to 4.6 s on an Apple Silicon MacBook, and the first call is slowest because of model load.
+- Peak memory of the suite run: about 100 MB (measured with `/usr/bin/time -l python scripts/run_suite.py`, maximum resident set size).
+- Python 3.13, macOS (Apple Silicon). Dependencies are pinned in `requirements.txt`.
